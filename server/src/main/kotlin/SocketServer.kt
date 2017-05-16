@@ -7,11 +7,11 @@ class SocketServer(val serverSocket: ServerSocket) {
     val messageSender = MessageSender()
 
     fun create() {
-        println("SocketServer - Aguardando cliente...")
+        println("SocketServer - Waiting for client...")
         val accept = serverSocket.accept()
 
-        println(format("Conectado com cliente: %s", accept.localSocketAddress))
-        println("Mensagens:")
+        println(format("Client connected: %s", accept.localSocketAddress))
+        println("Messages:")
 
         messageReceiver.start(accept)
         messageSender.start(accept)

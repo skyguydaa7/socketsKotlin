@@ -6,7 +6,7 @@ class SocketClient(val socketClient: Socket) {
     val messageSender = MessageSender()
 
     fun start() {
-        println("Mensagens:")
+        println("Messages:")
 
         messageReceiver.start(socketClient)
         messageSender.start(socketClient)
