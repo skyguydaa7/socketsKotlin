@@ -1,14 +1,19 @@
+import java.io.ObjectOutputStream
 import java.net.Socket
 import kotlin.system.exitProcess
 
 class MessageSender {
 
-    fun start(accept: Socket) {
-        val outputStream = accept.getOutputStream()
+    fun start(accept: Socket, sender: String) {
+        val objectOutputStream = ObjectOutputStream(accept.getOutputStream())
         do {
             val message = readLine()
 
-            outputStream.write(message!!.trim().toByteArray(Charsets.UTF_8))
+            if (message!!.isNotEmpty()) {
+                val toSend = Message(sender = sender, message = message)
+                objectOutputStream.writeObject(toSend)
+            }
+
         } while (message != "FIM")
         exitProcess(0)
     }

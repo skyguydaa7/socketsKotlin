@@ -14,6 +14,6 @@ class SocketServer(val serverSocket: ServerSocket) {
         println("Messages:")
 
         messageReceiver.start(accept)
-        messageSender.start(accept)
+        messageSender.start(accept, "server")
     }
 }

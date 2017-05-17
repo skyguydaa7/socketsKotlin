@@ -9,6 +9,6 @@ class SocketClient(val socketClient: Socket) {
         println("Messages:")
 
         messageReceiver.start(socketClient)
-        messageSender.start(socketClient)
+        messageSender.start(socketClient, "client")
     }
 }

@@ -1,3 +1,4 @@
+import java.io.ObjectInputStream
 import java.net.Socket
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
@@ -6,15 +7,17 @@ class MessageReceiver {
 
     fun start(accept: Socket) {
         thread {
-            val inputStream = accept.getInputStream()
+            val objectInputStream = ObjectInputStream(accept.getInputStream())
             do {
-                val received = ByteArray(DEFAULT_BUFFER_SIZE)
-                inputStream.read(received)
-
-                val receivedString = String(received, Charsets.UTF_8).replace("\u0000", "").trim()
-
-                println(String.format("Mensagem recebida: %s", receivedString))
-            } while (receivedString != "FIM" && !accept.isInputShutdown)
+                var lastMessageReceivedText = ""
+                try {
+                    val receivedMessage = objectInputStream.readObject() as Message
+                    lastMessageReceivedText = receivedMessage.message
+                    println(String.format("Message from %s: %s", receivedMessage.sender, lastMessageReceivedText))
+                } catch (e: Exception) {
+                    println("Error reading message content.")
+                }
+            } while (lastMessageReceivedText != "FIM" && !accept.isInputShutdown)
             exitProcess(0)
         }
     }
